@@ -1,0 +1,95 @@
+* {
+    font-family: 'Raleway', sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #ccc;
+}
+
+.todo-list-wrapper {
+    background-color: #c15453;
+    max-width: 760px;
+    box-shadow: 13px 13px 16px 8px #bfb6b6;
+    margin: auto;
+}
+
+.todo-input-wrapper {
+    padding: 20px;
+    background: brown;
+}
+
+.todo-input-wrapper #todo-input {
+    width: 100%;
+    font-size: 24px;
+    margin: 20px 0;
+    font-weight: 300;
+    padding: 6px;
+}
+
+.todo-input-wrapper #todo-submit {
+    background: #969696;
+    padding: 10px 38px;
+    font-size: 20px;
+    font-weight: 200;
+    transition: all .3s ease-in-out;
+}
+
+.todo-input-wrapper #todo-submit:hover,
+.todo-input-wrapper #todo-submit:focus {
+    background: #ca3b3b;
+    color: #fff;
+}
+
+.todo-list {
+    background: pink;
+    padding: 20px 40px;
+    list-style-type: none;
+}
+
+.todo-list-count {
+    font-size: 20px;
+    color: #333;
+    margin: 10px 0 20px 0;
+    display: flex;
+    align-items: center;
+}
+
+.todo-count {
+    font-weight: 600;
+    padding: 3px 9px 6px 9px;
+    background: #b73030;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 16px;
+    margin: 0 6px;
+}
+
+.todo-list li {
+    margin: 10px 0;
+    font-weight: 600;
+    font-size: 26px;
+    border: 2px solid #670000;
+    background: brown;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.error {
+    background-color: #ce4545;
+    padding: 10px 5px;
+    font-weight: 600;
+}
+
+.remove {
+    cursor: pointer;
+    background: url('./img/delete.png');
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+}
