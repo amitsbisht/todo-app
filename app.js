@@ -57,3 +57,24 @@ function removeTodo() {
         });
     });
 }
+
+var clearBtn = document.getElementById('clear-todo');
+
+clearBtn.addEventListener("click", function () {
+    var todo = document.querySelectorAll('li');
+    errorPara = document.querySelector('.error');
+    if (todoList.contains(errorPara))
+        todoList.removeChild(errorPara);
+    if (todo.length >= 1) {
+        todo.forEach(element => {
+            element.remove();
+        });
+        // Change todo count back to 0
+        todoCount.innerText = 0;
+    } else {
+        var error = document.createElement("P");
+        error.setAttribute('class', 'error');
+        error.innerText = "Please Enter something first!";
+        todoList.appendChild(error);
+    }
+});
