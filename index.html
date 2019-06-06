@@ -6,22 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>TODO App</title>
-    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link rel="shortcut-icon" href="./favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="todo-list-wrapper">
-        <div class="todo-input-wrapper">
-            <input type="text" id="todo-input" placeholder="Enter TODO here">
-            <button id="todo-submit">Add</button>
-            <button id="clear-todo">Clear All</button>
+
+    <div class="todo">
+        <div class="todo-form">
+            <h2 class="todo-form-heading">Enter your todo here!</h2>
+            <form action="#">
+                <div class="form-input">
+                    <input type="text" placeholder="Enter todo here..." class="todo-text">
+                </div>
+                <button class="todo-submit">Submit</button>
+                <button class="todo-remove-all">Remove All</button>
+            </form>
         </div>
-        <ul class="todo-list">
-            <div class="todo-list-count">Currently there are <span class="todo-count">0</span> things to do...</div>
-        </ul>
+        <div class="todo-list">
+            <h2 class="todo-list-heading">Todo List</h2>
+            <!-- <div id="todo-1" class="todo-item">
+                <h3 class="todo-value">This is a test todo!</h3>
+                <svg class="todo-delete">
+                    <use xlink:href="icons/sprite.svg#icon-delete"></use>
+                </svg>
+            </div> -->
+        </div>
     </div>
+
+    <script src="app.js"></script>
 </body>
-<script src="app.js"></script>
 
 </html>

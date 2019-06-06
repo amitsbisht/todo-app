@@ -1,80 +1,142 @@
-var submitBtn = document.getElementById('todo-submit');
-var todoCount = document.querySelector('.todo-count');
-var todoList = document.querySelector('.todo-list');
-var todoInput = document.getElementById('todo-input');
+var todoController = (function () {
+    var todo = function (id, value) {
+        this.id = id;
+        this.value = value;
+    };
 
-submitBtn.addEventListener('click', submitTodo);
-todoInput.addEventListener("keyup", function (event) {
-    event.preventDefault();
-    if (event.keyCode === 13) {
-        submitBtn.click();
-    }
-});
+    var allTodos = [];
 
-function submitTodo(e) {
-    var todo = document.getElementById('todo-input').value;
-    if (todo != '') {
-        errorPara = document.querySelector('.error');
-        if (todoList.contains(errorPara))
-            todoList.removeChild(errorPara);
-        var todoItem = document.createElement('li');
-        todoItem.appendChild(document.createTextNode(todo));
-        var addRemoveIcon = document.createElement("div");
-        addRemoveIcon.setAttribute('class', 'remove');
-        todoItem.appendChild(addRemoveIcon);
-        todoCount.innerText = parseInt(todoCount.innerText) + 1;
-        // console.log(todoItem);
-        todoList.appendChild(todoItem);
-        // console.dir(todo.todoList);
-        document.getElementById('todo-input').value = "";
-    } else {
-        errorPara = document.querySelector('.error');
-        if (todoList.contains(errorPara))
-            return;
-        else {
-            var error = document.createElement("P");
-            error.setAttribute('class', 'error');
-            error.innerText = "Please Enter something first!";
-            todoList.appendChild(error);
+    return {
+        addTodo: function (todoValue) {
+            var newTodo, ID, todoObj;
+            if (allTodos.length === 0) {
+                ID = 0;
+            } else {
+                ID = allTodos[allTodos.length - 1].id + 1;
+            }
+
+            newTodo = new todo(ID, todoValue);
+
+            todoObj = {
+                id: ID,
+                value: todoValue
+            };
+
+            allTodos.push(todoObj);
+
+            return newTodo;
+        },
+        deleteTodo: function (ID) {
+            var index;
+
+            allTodos.forEach(function (current, i) {
+                if (current.id === ID) {
+                    index = i;
+                }
+            });
+
+            allTodos.splice(index, 1);
+
+            return ID;
+        },
+        removeAllTodos: function () {
+            allTodos = [];
         }
-    }
-}
+    };
+})();
 
-document.querySelector('body').addEventListener('click', function (event) {
-    var removeBtn = document.querySelectorAll('.remove');
-    if (removeBtn.length > 0) {
-        removeTodo();
-    }
-});
+var UIController = (function () {
+    var DOMElements = {
+        submitTodo: '.todo-submit',
+        removeAllTodo: '.todo-remove-all',
+        todoInput: '.todo-text',
+        todoContainer: '.todo-list',
+        allTodos: '.todo-item'
+    };
 
-function removeTodo() {
-    var removeBtn = document.querySelectorAll('.remove');
-    removeBtn.forEach(function (elem) {
-        elem.addEventListener("click", function (e) {
-            //this function does stuff
-            this.parentNode.parentNode.removeChild(this.parentNode);
-            todoCount.innerText = parseInt(todoCount.innerText) - 1;
-        });
-    });
-}
+    return {
+        displayTodo: function (todoObj) {
+            var html, newHtml;
 
-var clearBtn = document.getElementById('clear-todo');
+            html = '<div id="%id%" class="todo-item"><h3 class="todo-value">%value%</h3><svg class="todo-delete"><use xlink:href="icons/sprite.svg#icon-delete"></use></svg></div>';
 
-clearBtn.addEventListener("click", function () {
-    var todo = document.querySelectorAll('li');
-    errorPara = document.querySelector('.error');
-    if (todoList.contains(errorPara))
-        todoList.removeChild(errorPara);
-    if (todo.length >= 1) {
-        todo.forEach(element => {
-            element.remove();
-        });
-        // Change todo count back to 0
-        todoCount.innerText = 0;
-    } else {
-        var error = document.createElement("P");
-        error.setAttribute('class', 'error');
-        error.innerText = "Please Enter something first!";
-        todoList.appendChild(error);
-    }
-});
+            newHtml = html.replace('%id%', todoObj.id);
+            newHtml = newHtml.replace('%value%', todoObj.value);
+
+            document.querySelector(DOMElements.todoContainer).insertAdjacentHTML('beforeend', newHtml);
+
+        },
+        deletedTodo: function (ID) {
+            document.getElementById("" + ID).parentNode.removeChild(document.getElementById(ID));
+
+        },
+        removeAllTodos: function () {
+            var list;
+
+            list = document.querySelectorAll(DOMElements.allTodos);
+
+            list.forEach(function (current) {
+                current.parentNode.removeChild(current);
+            });
+        },
+        getElements: function () {
+            return DOMElements;
+        }
+    };
+})();
+
+var appController = (function (todoCtrl, UICtrl) {
+
+    var initializeHandlers = function () {
+        var elements = UICtrl.getElements();
+        document.querySelector(elements.submitTodo).addEventListener('click', addTodo);
+
+        document.addEventListener('click', deleteTodo);
+
+        document.querySelector(elements.removeAllTodo).addEventListener('click', removeAllTodos);
+
+    };
+
+    var addTodo = function (e) {
+        var newTodo, elements, todoInput;
+        elements = UICtrl.getElements();
+        e.preventDefault();
+
+        todoInput = document.querySelector(elements.todoInput);
+
+        if (todoInput.value.trim().length > 0) {
+            newTodo = todoCtrl.addTodo(todoInput.value);
+
+            UICtrl.displayTodo(newTodo);
+        }
+    };
+
+    var deleteTodo = function (e) {
+        var todo, ID;
+
+        if (e.target.parentNode.classList[0] === "todo-delete") {
+            todo = e.target.parentNode.parentNode;
+
+            ID = parseInt(todo.getAttribute('id'));
+
+            ID = todoCtrl.deleteTodo(ID);
+
+            UICtrl.deletedTodo(ID);
+        }
+    };
+
+    var removeAllTodos = function () {
+        todoCtrl.removeAllTodos();
+
+        UICtrl.removeAllTodos();
+    };
+
+    return {
+        init: function () {
+            console.log('Application has started');
+            initializeHandlers();
+        }
+    };
+})(todoController, UIController);
+
+appController.init();
